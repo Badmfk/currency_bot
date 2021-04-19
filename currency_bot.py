@@ -2,7 +2,7 @@ import telebot
 import requests
 
 
-def get_currency(currency):
+def get_currency(currency): # Функция для поиска валюты через API сбербанка
 	currency_json = requests.get('https://www.cbr-xml-daily.ru/daily_json.js')
 	if currency == 'dollar':
 		result_dollar = currency_json.json()['Valute']['USD']['Value']
@@ -23,11 +23,11 @@ bot = telebot.TeleBot('Пропишите токен вашего бота')
 keyboard1 = telebot.types.ReplyKeyboardMarkup()
 keyboard1.row('dollar', 'euro', 'bitcoin')
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['start']) # Функция-приветствие при первом сообщении боту
 def start_message(message):
 	bot.send_message(message.chat.id, 'Привет, я подскажу тебе курсы главных валют, просто выбери интересующую тебя', reply_markup = keyboard1)
 
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(content_types=['text']) # Обработчик текста, отправленного через кнопки в боте
 def send_text(message):
 	bot.send_message(message.chat.id, get_currency(message.text))
 
